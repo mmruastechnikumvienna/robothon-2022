@@ -5,7 +5,7 @@ Quick Start Guide:
 4. Connect PC with required software (see software dependency list) to Ethernet Port X3 of Robot Controller
 7. Connect Modbus/USB Adapter from Gripper to PC
 8. Start Matlab
-9. Start the script "gripper_init" (Might require setting the correct COM Port of the gripper e.g. "COM3")
+9. Start the script "gripper_init" (Might require setting the correct COM Port of the gripper e.g. "COM3"), the gripper will now open and close to calibrate
 10. Switch the robot from manual mode into automatic mode
 11. Confirm in the teach panel
 12. Confirm that the workspace is free of obstacles and it is safe to operate the robot

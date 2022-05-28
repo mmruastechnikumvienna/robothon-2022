@@ -16,5 +16,5 @@ Quick Start Guide:
 17. Hit play on the robots teach panel, the robot will move into camera position if not already in it
 18. Hit play on the matlab script "image_processing"
 19. The programm will start as soon as the matlab script sends the detected taskboard pose to the robot
-20. Hit stop on the matlab script and the robots teach panel after each run (for safety reasons)
+20. Hit stop in the matlab script AND the robots teach panel after each run (for safety reasons)
 21. Begin from step 14. to repeat.

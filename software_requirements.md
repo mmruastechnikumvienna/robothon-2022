@@ -1,32 +1,25 @@
-# Hardware Requirements
+# Software Requirements
 
-## 1. Robot System:
-- Controller ABB IRC5 Compact (including cabling)
-- Robot ABB IRB 1200-5/0.9 Standard 5kg Payload
-- FlexPenant ABB DSQC 679
+## 1. General:
+- Windows 10 or higher https://www.microsoft.com/de-de/software-download/windows8ISO (Linux maybe possible, but not tested)
+- Python 3.9 or higher https://www.python.org/downloads/release/python-390/ (for gripper control)
+- pySerial 3.4 or higher https://pyserial.readthedocs.io/en/latest/pyserial.html (for gripper control)
+- IntelReal Sense Driver https://www.intel.de/content/www/de/de/download/19236/intel-realsense-d400-series-universal-windows-platform-uwp-driver-for-windows-10.html
+- IntelReal Sense SDK 2.0 https://www.intelrealsense.com/sdk-2/ (for image processing and calibration)
+- RobotStudio 2022.1 https://new.abb.com/products/robotics/de/robotstudio/downloads (to programm robot controller)
 
-## 2. Gripper:
-- Robotiq 2F 85 Adaptive Gripper (screws included)
-- Robotiq Coupler Plate 50mm PCD with 4 x M6 (ISO 9409-1-50-4-M6)
-- Digitus USB 2.0 Adapter [1x RS485-Plug - 1x USB 2.0 Plug A] DA-70157 (to connect gripper to PC)
+## 2. Matlab:
+- Matlab R2021a or higher with activated python environment, see https://de.mathworks.com/help/matlab/matlab_external/create-object-from-python-class.html for reference
+- Instrument Control Toolbox https://de.mathworks.com/products/instrument.html
+- Robotiq Gripper Toolbox https://github.com/MinyaRancic/Robotiq-Gripper (for gripper control)
+- Image Processing Toolbox https://de.mathworks.com/products/image.html
+- Computer Vision Toolbox https://www.mathworks.com/products/computer-vision.html
+- Aerospace Toolbox https://www.mathworks.com/products/aerospace-toolbox.html
+- Data Acquisition Toolbox https://www.mathworks.com/products/data-acquisition.html
 
-## 3. Vision System:
-- Intel Real Sense D435
-
-## 4. 3D-Printed Parts:
-- adapter_plate_with_camera_holder.3mf
-- 2x gripper_finger.3mf
-- centering_device.3mf
-
-## 5. Misc:
-- USB-C/USB 3.0 Cable min. 2m (to connect Camera to PC)
-- Ethernet CAT6 Cable min. 1,5m (to connect robot controller to PC)
-- End-Switch 24V DC rating NO (e.g. CHZJTTDQ)
-- 3mm² cable black min. 1,5m
-- 3mm² cable black min. 1,5m
-- 4x M5x25mm hexagon socket
-
-## Info replacement:
-- Robot system can be replaced with different 6-Axis robot systems
-- Gripper can be replaced with different gripper with similar span (85mm) and the ability to go to a set position and not just open and close
-- Vision system can be replaced with different 2D-Vision camera with similar dimensions
+## 3. Provided
+- gripper_init.m (for gripper intialisation and calibration)
+- image_processing.m (for image processing, communication with controller and control of the gripper)
+- CalibData.txt (Workobject and Tool definition used in the robot controller)
+- main.txt (Main programm routine used in the robot controller)
+- module1.txt (Position data used in the robot controller)

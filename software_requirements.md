@@ -20,6 +20,6 @@
 ## 3. Provided
 - gripper_init.m (for gripper intialisation and calibration)
 - image_processing.m (for image processing, communication with controller and control of the gripper)
-- CalibData.txt (Workobject and Tool definition used in the robot controller)
+- calib_data.txt (Workobject and Tool definition used in the robot controller)
 - main.txt (Main programm routine used in the robot controller)
-- module1.txt (Position data used in the robot controller)
+- mod_1.txt (Position data used in the robot controller)

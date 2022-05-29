@@ -13,12 +13,12 @@
 ## 3. Vision System:
 - Intel Real Sense D435
 
-## 4. 3D-Printed Parts
+## 4. 3D-Printed Parts:
 - adapter_plate_with_camera_holder.3mf
 - 2x gripper_finger.3mf
 - centering_device.3mf
 
-## 5. Misc
+## 5. Misc:
 - USB-C/USB 3.0 Cable min. 2m (to connect Camera to PC)
 - Ethernet CAT6 Cable min. 1,5m (to connect robot controller to PC)
 - End-Switch 24V DC rating NO (e.g. CHZJTTDQ)
@@ -26,7 +26,7 @@
 - 3mm² cable black min. 1,5m
 - 4x M5x25mm hexagon socket
 
-## Info replacement
+## Info replacement:
 - Robot system can be replaced with different 6-Axis robot systems
 - Gripper can be replaced with different gripper with similar span (85mm) and the ability to go to a set position and not just open and close
 - Vision system can be replaced with different 2D-Vision camera with similar dimensions

@@ -1,0 +1,381 @@
+MODULE MainModule
+    VAR socketdev server;
+    VAR socketdev client;
+
+    var num x;
+    !483
+    var num y;
+    !-116.46
+    var num z;
+    VAR num absvec;
+    VAR num quat1;
+    !0.8521
+    VAR num quat2;
+    !0
+    VAR num quat3;
+    !0
+    VAR num quat4;
+    !0.5234
+    VAR orient orient1;
+
+    VAR robtarget ptouch1:=[[-125,60,-32],[0,0.707106781,0.707106781,0],[0,2,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    VAR robtarget ptouch2:=[[-125, -100,-32],[0,0.707106781,0.707106781,0],[0,2,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    VAR robtarget ptouch3:=[[45.28,170,-32],[0.00730423,0.999838,0.015611,0.0052603],[0,-1,2,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+
+    CONST robtarget mid:=[[0,0,200],[0,0.707106781,0.707106781,0],[0,0,0,1],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+
+    VAR robtarget ptouched1:=[[-200,70,50],[0,0.707106781,0.707106781,0],[0,2,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    VAR robtarget ptouched2:=[[-200,70,50],[0,0.707106781,0.707106781,0],[0,2,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    VAR robtarget ptouched3:=[[-200,70,50],[0,0.707106781,0.707106781,0],[0,2,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+
+    VAR robtarget p_world1:=[[100,200,300],[1,0,0,0],[0,0,0,0],[9E9,9E9,9E9,9E9,9E9,9E9]];
+    VAR robtarget p_world2:=[[100,200,300],[1,0,0,0],[0,0,0,0],[9E9,9E9,9E9,9E9,9E9,9E9]];
+    VAR robtarget p_world3:=[[100,200,300],[1,0,0,0],[0,0,0,0],[9E9,9E9,9E9,9E9,9E9,9E9]];
+
+
+    VAR num targetgrippos:=200;
+    VAR num grippos:=0;
+    VAR string message;
+    VAR rawbytes raw_data;
+    CONST robtarget key_rot:=[[-35.71,58.51,52.46],[0.000782028,-0.393022,-0.919529,0.00024868],[0,-1,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget lan_1:=[[-31.20,6.81,39.75],[0.126927,-0.704692,-0.686516,-0.126473],[-1,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget lan_2:=[[-32.60,11.23,38.19],[0.00624593,0.715788,0.698216,-0.0101724],[-1,-1,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget lan_3:=[[-32.32,-29.37,35.32],[0.00393244,0.674613,0.738084,0.0106784],[-1,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget batfach_deckel_1:=[[21.59,-11.82,38.89],[0.0778134,-0.715082,0.689941,0.0811444],[-1,0,-2,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget CR2032_anfahren:=[[-34.35,-99.75,33.85],[0.0416148,0.699949,0.712122,-0.0349506],[-1,-1,1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget CR2032_aushebeln:=[[-34.35,-88.55,33.83],[0.0416153,0.69994,0.712131,-0.0349538],[-1,-1,1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget CR2032_aufheben:=[[-47.43,-97.33,33.92],[0.0282574,0.700892,0.712499,-0.0172455],[-1,-1,1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget CR2032_ablegen:=[[-15.69,-111.86,28.55],[0.0305599,0.999374,0.00461625,0.017191],[-1,-1,1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget batt_lan_drop:=[[523.63,-250.68,-244.32],[5.56945E-05,-0.999996,-0.00277655,6.4958E-05],[-1,0,-3,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget batt_lan_pickup:=[[523.67,-248.54,-137.64],[1.22411E-05,-1.02107E-05,-1,-3.4955E-05],[-1,0,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget bush_bat_but:=[[19.26,-76.52,72.05],[0.000118867,0.000739926,-1,2.96833E-06],[-1,0,-1,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    CONST robtarget bush_bat_correct:=[[-30.22,-101.87,139.14],[0.298979,-0.249213,0.907331,0.158921],[-1,1,-2,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+
+    FUNC num gripper(var num grippos,var socketdev server,var socketdev client)
+        ClearRawBytes raw_data;
+        PackRawBytes grippos,raw_data,1\IntX:=INT;
+        SocketSend client\RawData:=raw_data;
+        RETURN grippos;
+        !Return wert is wertlos!
+    ENDFUNC
+
+    PROC main()
+        !Erstellen Verbindung
+ 
+        VAR signaldi signaldi1;
+
+        MoveAbsJ snapshot,vmax,fine,Greifer\WObj:=wobj2;
+
+        SocketCreate server;
+        SocketBind server,"192.168.0.1",55000;
+        SocketListen server;
+        SocketAccept server,client,\Time:=600;
+
+        !Matlab Foto machen und schicken an Roboter
+
+        SocketReceive client,\RawData:=raw_data;
+        UnpackRawBytes raw_data,1,x,\Float4;
+        UnpackRawBytes raw_data,5,y,\Float4;
+        UnpackRawBytes raw_data,9,quat1,\Float4;
+        UnpackRawBytes raw_data,13,quat2,\Float4;
+        UnpackRawBytes raw_data,17,quat3,\Float4;
+        UnpackRawBytes raw_data,21,quat4,\Float4;
+
+        orient1.q1:=quat1;
+        orient1.q2:=quat2;
+        orient1.q3:=quat3;
+        orient1.q4:=quat4;
+
+        wobj2.oframe.trans.x:=x;
+        wobj2.oframe.trans.y:=y;
+        wobj2.oframe.trans.z:=-194;
+
+        wobj2.oframe.rot:=orient1;
+
+        ConfJ\Off;
+        ConfL\Off;
+        
+        !Punkt 1 für Werkobjekt
+        GreiferZu;
+        WaitTime (1);
+        MoveJ offs(ptouch1,0,0,150),v1000,z100,Greifer,\WObj:=wobj2;
+        MoveJ offs(ptouch1,0,0,30),v1000,z0,Greifer,\WObj:=wobj2;
+        MoveJ ptouch1,v100,fine,Greifer,\WObj:=wobj2;
+        ptouch1:=offs(ptouch1,100,0,0);
+        SearchL\Sstop,D652_10_IN0\HighLevel,ptouched1,ptouch1,v5,Greifer\WObj:=wobj2;
+        p_world1:=CRobT(\Tool:=Greifer,\WObj:=wobj0);
+        MoveJ offs(ptouched1,-20,0,0),v100,fine,Greifer,\WObj:=wobj2;
+
+        !Punkt 2 für Werkobjekt
+        MoveL ptouch2,v1000,fine,Greifer,\WObj:=wobj2;
+        ptouch2:=offs(ptouch2,100,0,0);
+        SearchL\Sstop,D652_10_IN0,\HighLevel,ptouched2,ptouch2,v5,Greifer\WObj:=wobj2;
+        p_world2:=CRobT(\Tool:=Greifer,\WObj:=wobj0);
+        MoveJ offs(ptouched2,-20,0,0),v100,fine,Greifer,\WObj:=wobj2;
+        MoveJ offs(ptouched2,-20,0,170),vmax,fine,Greifer,\WObj:=wobj2;
+
+        !Punkt 3 für Werkobjekt
+        MoveJ offs(ptouch3,0,0,170),v1000,fine,Greifer,\WObj:=wobj2;
+        MoveJ offs(ptouch3,0,0,30),v1000,fine,Greifer,\WObj:=wobj2;
+        MoveL ptouch3,v50,fine,Greifer,\WObj:=wobj2;
+        ptouch3:=offs(ptouch3,0,-100,0);
+        SearchL\Sstop,D652_10_IN0,\HighLevel,ptouched3,ptouch3,v5,Greifer\WObj:=wobj2;
+        p_world3:=CRobT(\Tool:=Greifer,\WObj:=wobj0);
+        MoveJ offs(ptouched3,0,20,0),v100,fine,Greifer,\WObj:=wobj2;
+        MoveJ offs(ptouched3,0,20,170),vmax,z100,Greifer,\WObj:=wobj2;
+
+        !Erstellung Werkobjekt durch 3 Punkte
+        wobj3.uframe:=DefFrame(p_world1,p_world2,p_world3\Origin:=3);
+        wobj3.oframe:=[[0,0,0],[1,0,0,0]];
+
+        !Verschiebung Werkobjekt um Werkzeug
+        wobj3.oframe.trans.x:=28;
+        wobj3.oframe.trans.y:=28;
+        
+        wobj3.oframe.rot:=OrientZYX(90,0,0);
+        wobj3.oframe.trans.x:=wobj3.oframe.trans.x+127;
+        wobj3.oframe.trans.y:=wobj3.oframe.trans.y+77;
+        wobj3.oframe.trans.z:=wobj3.oframe.trans.z+15;  
+
+        MoveAbsJ snapshot,vmax,fine,Greifer\WObj:=wobj2;
+        ConfL \On;
+        ConfJ \On;
+        button_blue_press;
+        key;
+        lan;
+        bat_auf;
+        C2032;
+        button_red_press;
+        
+        MoveAbsJ snapshot,vmax,z100,Greifer\WObj:=wobj2;
+
+        SocketClose client;
+        SocketClose server;
+
+    ENDPROC
+
+    PROC GreiferZu()
+        targetgrippos:=255;
+        grippos:=gripper(targetgrippos,server,client);
+    ENDPROC
+
+    PROC GreiferAuf()
+        targetgrippos:=0;
+        grippos:=gripper(targetgrippos,server,client);
+    ENDPROC
+
+    PROC GreiferHalb()
+        targetgrippos:=120;
+        grippos:=gripper(targetgrippos,server,client);
+    ENDPROC
+    
+    PROC C2032()
+        targetgrippos:=150;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime (1);
+        MoveJ offs(CR2032_anfahren, 0,0,50), vmax, z0, Greifer, \WObj:=wobj3;
+        MoveL CR2032_anfahren, v100, fine, Greifer, \WObj:=wobj3;
+        MoveL CR2032_aushebeln, v20, fine, Greifer , \WObj:=wobj3;
+        MoveL offs(CR2032_aushebeln, 0,0,20), v20, fine, Greifer, \WObj:=wobj3;
+        MoveL offs(CR2032_aufheben, 0,0,20), v20, fine, Greifer, \WObj:=wobj3;
+        Movel CR2032_aufheben, v20, fine, Greifer, \WObj:=wobj3;
+        Movel offs(CR2032_aufheben,10,0,0), v10, fine, Greifer, \WObj:=wobj3;
+        Movel offs(CR2032_aufheben,10,0,50), v50, z0, Greifer, \WObj:=wobj3;
+!        targetgrippos:=168;
+!        grippos:=gripper(targetgrippos,server,client);
+!        WaitTime (1);
+!        MoveL offs(CR2032_aufheben, 0,0,20), v20, z0, Greifer, \WObj:=wobj3;
+!        MoveL offs(CR2032_ablegen, 0,0,20), vmax, fine, Greifer, \WObj:=wobj3;
+!        MoveL CR2032_ablegen,v50,fine,Greifer,\WObj:=wobj3;
+!        targetgrippos:=155;
+!        grippos:=gripper(targetgrippos,server,client);
+!        WaitTime (1);
+!        MoveL offs(CR2032_ablegen, 0,0,50), vmax, fine, Greifer, \WObj:=wobj3;
+        MoveAbsJ snapshot,vmax,fine,Greifer\WObj:=wobj2;
+    ENDPROC
+    
+    
+    PROC bat_auf()
+        targetgrippos:=255;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveJ offs(batfach_deckel_1, 0, 0, 50), vmax, z0, Greifer, \WObj:=wobj3;
+        MoveL batfach_deckel_1, v50, fine, Greifer, \WObj:=wobj3;
+        MoveL offs(batfach_deckel_1, 0,30,0), v10, fine, Greifer, \WObj:=wobj3;
+        MoveJ offs(batfach_deckel_1, 0, 30, 10), v100, z0, Greifer, \WObj:=wobj3;
+        MoveJ offs(batfach_deckel_1, 0, 0, 50), v100, z0, Greifer, \WObj:=wobj3;
+        MoveL batfach_deckel_1, v50, fine, Greifer, \WObj:=wobj3;
+        MoveL offs(batfach_deckel_1, 0,60,0), v50, fine, Greifer, \WObj:=wobj3;
+        MoveJ offs(batfach_deckel_1, 0, 70, 10), v100, z0, Greifer, \WObj:=wobj3;
+        
+        !Batterie aussen raushebeln
+        MoveJ offs(Batt_aussen_rausheben, 0,0,30), vmax, z0, Greifer, \WObj:=wobj3;
+        targetgrippos:=65;
+        grippos:=gripper(targetgrippos,server,client);
+        MoveL Batt_aussen_rausheben, v10, fine, Greifer, \WObj:=wobj3;
+        MoveL offs(Batt_aussen_rausheben, 0,-5,0), v5, fine, Greifer, \WObj:=wobj3;
+        MoveL offs(Batt_aussen_rausheben, 0,-5,15), v10, z0, Greifer, \WObj:=wobj3;
+        MoveL offs(Batt_aussen_rausheben, 0,10,15), v10, z0, Greifer, \WObj:=wobj3;
+        MoveL offs(Batt_aussen_rausheben, 0,10,30), v100, z0, Greifer, \WObj:=wobj3;
+        WaitTime(1);
+        
+        !Batterie aussen aufnehmen
+        targetgrippos:=170;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveL offs(Batt_aussen_aufnehmen, 0,0,30), vmax, z0, Greifer, \WObj:=wobj3;
+        MoveL Batt_aussen_aufnehmen, v50, fine, Greifer, \WObj:=wobj3;
+        targetgrippos:=255;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveL offs(Batt_aussen_aufnehmen, 0,0,30), v50, fine, Greifer, \WObj:=wobj3;
+        
+        !Batterie aussen in Lade legen
+        MoveAbsJ snapshot,vmax,z100,Greifer\WObj:=wobj3;
+        MoveJ offs(Batt_Positioning_drop, 0,0,150), vmax, z0, Greifer \WObj:=wobj0;
+        MoveJ offs(Batt_Positioning_drop, 0,0,10), vmax, z0, Greifer \WObj:=wobj0;
+        MoveL Batt_Positioning_drop, v100, fine, Greifer \WObj:=wobj0; 
+        targetgrippos:=0;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveJ offs(Batt_positioning_pickup, 0,0,30), vmax, z0, Greifer \WObj:=wobj0;
+        MoveL Batt_positioning_pickup, v100, fine, Greifer \WObj:=wobj0;
+        targetgrippos:=255;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveJ offs(Batt_positioning_pickup, 0,0,30), v100, z0, Greifer \WObj:=wobj0;
+        MoveL offs(Batt_positioning_pickup, 0,0,150), vmax, z0, Greifer \WObj:=wobj0;
+    
+        !Batterie aussen platzieren
+        MoveAbsJ snapshot,vmax,z0,Greifer\WObj:=wobj3;
+        MoveJ offs(Batt_Placement, 0,0,100), vmax, z0, Greifer \WObj:=wobj3;
+        MoveJ offs(Batt_Placement, 0,0,20), v100, z0, Greifer \WObj:=wobj3;
+        MoveL Batt_Placement, v10, z0, Greifer \WObj:=wobj3;
+        targetgrippos:=150;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveL offs(Batt_Placement, 0,0,50), v100, z0, Greifer \WObj:=wobj3;
+        MoveAbsJ snapshot,v1000,z100,Greifer\WObj:=wobj3;
+        
+        !Batterie LAN raushebeln
+        targetgrippos:=65;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveJ offs(Batt_LAN_rausheben, 0,0,30), vmax, z0, Greifer, \WObj:=wobj3;
+        MoveL Batt_LAN_rausheben, v10, fine, Greifer, \WObj:=wobj3;
+        MoveL offs(Batt_LAN_rausheben, 0,5,0), v5, fine, Greifer, \WObj:=wobj3;
+        MoveL offs(Batt_LAN_rausheben, 0,5,15), v10, z0, Greifer, \WObj:=wobj3;
+        MoveL offs(Batt_LAN_rausheben, 0,-10,15), v10, z0, Greifer, \WObj:=wobj3;
+        MoveL offs(Batt_LAN_rausheben, 0,-10,30), v100, z0, Greifer, \WObj:=wobj3;
+        WaitTime(1);
+        
+        !Batterie LAN aufnehmen
+        targetgrippos:=170;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime (1);
+        MoveL offs(Batt_LAN_aufnehmen, 0,0,30), vmax, z0, Greifer, \WObj:=wobj3;
+        MoveL Batt_LAN_aufnehmen, v50, fine, Greifer, \WObj:=wobj3;
+        targetgrippos:=255;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime (1);
+        MoveL offs(Batt_LAN_aufnehmen, 0,0,30), v50, fine, Greifer, \WObj:=wobj3;
+        
+        !Batterie LAN in Lade legen
+        MoveAbsJ snapshot,vmax,z100,Greifer\WObj:=wobj3;
+        MoveJ offs(batt_lan_drop, 0,0,150), vmax, z0, Greifer \WObj:=wobj0;
+        MoveJ offs(batt_lan_drop, 0,0,10), vmax, z0, Greifer \WObj:=wobj0;
+        MoveL batt_lan_drop, v100, fine, Greifer \WObj:=wobj0; 
+        targetgrippos:=0;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveJ offs(batt_positioning_pickup, 0,0,30), vmax, z0, Greifer \WObj:=wobj0;
+        MoveL batt_positioning_pickup, v100, fine, Greifer \WObj:=wobj0;
+        targetgrippos:=255;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveJ offs(batt_positioning_pickup,0,0,30), v100, z0, Greifer \WObj:=wobj0;
+        MoveL offs(batt_positioning_pickup,0,0,150), vmax, z50, Greifer \WObj:=wobj0;
+        
+        !Batterie LAN platzieren
+        MoveAbsJ snapshot,vmax,z50,Greifer\WObj:=wobj3;
+        MoveJ offs(Battery_10, 0,0,70), vmax, z0, Greifer \WObj:=wobj3;
+        MoveJ offs(Battery_10, 0,0,40), v100, z0, Greifer \WObj:=wobj3;
+        MoveL Battery_10, v20, fine, Greifer \WObj:=wobj3;
+        targetgrippos:=150;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveL offs(Battery_10, 0,0,50), v100, z0, Greifer \WObj:=wobj3;
+        MoveJ bush_bat_correct, v100, z0, Greifer \WObj:=wobj3;
+        MoveL offs(bush_bat_but, 0,0, 50), v100, z0, Greifer \WObj:=wobj3;
+        targetgrippos:=170;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveL offs(bush_bat_but, 0,0, 20), vmax, z0, Greifer \WObj:=wobj3;
+        MoveL bush_bat_but, v10, fine, Greifer \WObj:=wobj3;
+        WaitTime(0.5);
+        MoveL offs(bush_bat_but, 0,0, 20), v50, z0, Greifer \WObj:=wobj3;
+        MoveAbsJ snapshot,vmax,z100,Greifer\WObj:=wobj3;   
+    ENDPROC
+
+    PROC key()
+        GreiferAuf;
+        MoveJ Offs(Key_Pickup,0,0,50),vmax,z100,Greifer\WObj:=wobj3;
+        MoveL Key_Pickup,v50,fine,Greifer\WObj:=wobj3;
+        GreiferZu;
+        WaitTime 1;
+        MoveL Offs(Key_Pickup,0,0,20),v50,fine,Greifer\WObj:=wobj3;
+        MoveJ Offs(Key_Pickup,0,0,50),vmax,z100,Greifer\WObj:=wobj3;
+        MoveL Offs(Key_drop,0,0,50),vmax,fine,Greifer\WObj:=wobj3;
+        MoveL Key_drop,v30,fine,Greifer\WObj:=wobj3;
+        MoveL key_rot,v5,fine,Greifer\WObj:=wobj3;
+        MoveL Key_drop,v5,fine,Greifer\WObj:=wobj3;
+        GreiferHalb;
+        WaitTime 1;
+        MoveJ Offs(Key_drop,0,0,50),v100,z100,Greifer\WObj:=wobj3;
+        MoveAbsJ snapshot,vmax,fine,Greifer\WObj:=wobj3;
+    ENDPROC
+
+    PROC lan()
+        targetgrippos:=100;
+        grippos:=gripper(targetgrippos,server,client);
+        MoveJ Offs(lan_1,0,0,80),vmax,z100,Greifer\WObj:=wobj3;
+        MoveJ lan_1,v50,fine,Greifer\WObj:=wobj3;
+        targetgrippos:=150;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveL lan_2, v50, fine, Greifer\WObj:=wobj3;
+        targetgrippos:=255;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime(1);
+        MoveL Offs(lan_2,0,0,50),v100,z100,Greifer\WObj:=wobj3;
+        MoveJ Offs(lan_3,0,0,50),v100,z100,Greifer\WObj:=wobj3;
+        MoveL lan_3, v20, fine, Greifer\WObj:=wobj3;
+        targetgrippos:=0;
+        grippos:=gripper(targetgrippos,server,client);
+        WaitTime (1);
+        MoveL Offs(lan_2,0,0,50),v100,z100,Greifer\WObj:=wobj3;
+        MoveL Offs(lan_2,0,0,100),vmax,z100,Greifer\WObj:=wobj3;
+        MoveAbsJ snapshot,vmax,z100,Greifer\WObj:=wobj3;
+    ENDPROC
+
+    PROC button_blue_press()
+        GreiferZu;
+        MoveJ Offs(Button_Blue,0,0,100),vmax,z100,Greifer\WObj:=wobj3;
+        MoveL Offs(Button_Blue,0,0,20),vmax,z0,Greifer\WObj:=wobj3;
+        MoveL Button_Blue, v20, fine, Greifer\WObj:=wobj3;
+        MoveJ Offs(Button_Blue,0,0,100),vmax,z10,Greifer\WObj:=wobj3;
+        GreiferAuf;
+        MoveAbsJ snapshot,vmax,fine,Greifer\WObj:=wobj3;
+    ENDPROC
+
+    PROC button_red_press()
+        GreiferZu;
+        MoveJ Offs(Button_red,0,0,100),vmax,z100,Greifer\WObj:=wobj3;
+        MoveL Offs(Button_red,0,0,20),vmax,z0,Greifer\WObj:=wobj3;
+        MoveL Button_red, v20, fine, Greifer\WObj:=wobj3;
+        MoveJ Offs(Button_red,0,0,100),v100,z10,Greifer\WObj:=wobj3;
+        GreiferAuf;
+        MoveAbsJ snapshot,vmax,fine,Greifer\WObj:=wobj3;
+    ENDPROC
+
+ENDMODULE

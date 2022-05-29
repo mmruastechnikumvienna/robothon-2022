@@ -1,4 +1,5 @@
-Quick Start Guide:
+## Quick Start Guide:
+
 1. Plug in Robot Controller 230V/50Hz
 2. Switch on Robot Controller
 3. Set IP of PC's Ethernet Adapter to 192.168.0.2
